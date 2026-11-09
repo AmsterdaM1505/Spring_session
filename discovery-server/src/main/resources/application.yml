@@ -1,0 +1,22 @@
+server:
+  port: ${PORT:8761}
+spring:
+  application:
+    name: discovery-server
+eureka:
+  client:
+    register-with-eureka: false
+    fetch-registry: false
+  server:
+    enable-self-preservation: true
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+registry:
+  password: ${REGISTRY_PASSWORD:RegistryDemo123}
+logging:
+  structured:
+    format:
+      console: logstash

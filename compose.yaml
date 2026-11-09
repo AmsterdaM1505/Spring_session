@@ -1,0 +1,66 @@
+x-common: &common
+  restart: unless-stopped
+  environment: &environment
+    EUREKA_URL: http://registry:RegistryDemo123@discovery-server:8761/eureka/
+  healthcheck: &healthcheck
+    test: [CMD-SHELL, 'curl -fsS http://localhost:$$PORT/actuator/health > /dev/null']
+    interval: 5s
+    timeout: 3s
+    retries: 40
+    start_period: 30s
+services:
+  discovery-server:
+    <<: *common
+    build:
+      context: .
+      args:
+        MODULE: discovery-server
+    environment:
+      PORT: 8761
+      REGISTRY_PASSWORD: RegistryDemo123
+    ports: ['127.0.0.1:8761:8761']
+  hotel-service:
+    <<: *common
+    build:
+      context: .
+      args:
+        MODULE: hotel-service
+    environment:
+      <<: *environment
+      PORT: 8082
+    depends_on:
+      discovery-server:
+        condition: service_healthy
+    ports: ['127.0.0.1:8082:8082']
+  booking-service:
+    <<: *common
+    build:
+      context: .
+      args:
+        MODULE: booking-service
+    environment:
+      <<: *environment
+      PORT: 8081
+    depends_on:
+      discovery-server:
+        condition: service_healthy
+      hotel-service:
+        condition: service_healthy
+    ports: ['127.0.0.1:8081:8081']
+  api-gateway:
+    <<: *common
+    build:
+      context: .
+      args:
+        MODULE: api-gateway
+    environment:
+      <<: *environment
+      PORT: 8080
+    depends_on:
+      discovery-server:
+        condition: service_healthy
+      hotel-service:
+        condition: service_healthy
+      booking-service:
+        condition: service_healthy
+    ports: ['127.0.0.1:8080:8080']

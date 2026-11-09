@@ -1,0 +1,9 @@
+.git
+.tools
+.work
+**/target
+deliverables
+evidence/runtime
+evidence/local-checks.txt
+review-excluded
+*.log

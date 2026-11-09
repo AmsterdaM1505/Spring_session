@@ -1,0 +1,54 @@
+server:
+  port: ${PORT:8081}
+spring:
+  application:
+    name: booking-service
+  datasource:
+    url: jdbc:h2:mem:booking-service;DB_CLOSE_DELAY=-1;LOCK_TIMEOUT=5000
+    username: sa
+    password:
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: create-drop
+    properties:
+      hibernate:
+        jdbc:
+          time_zone: UTC
+  h2:
+    console:
+      enabled: false
+eureka:
+  client:
+    service-url:
+      defaultZone: ${EUREKA_URL:http://registry:RegistryDemo123@localhost:8761/eureka/}
+    registry-fetch-interval-seconds: 5
+  instance:
+    prefer-ip-address: true
+    lease-renewal-interval-in-seconds: 5
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+logging:
+  structured:
+    format:
+      console: logstash
+app:
+  seed: ${SEED_DATA:true}
+  user-public-key: ${USER_PUBLIC_KEY:classpath:keys/demo-user-public.pem}
+  internal-public-key: ${INTERNAL_PUBLIC_KEY:classpath:keys/demo-internal-public.pem}
+  user-private-key: ${USER_PRIVATE_KEY:classpath:keys/demo-user-private.pem}
+  internal-private-key: ${INTERNAL_PRIVATE_KEY:classpath:keys/demo-internal-private.pem}
+  admin-password: ${BOOTSTRAP_ADMIN_PASSWORD:DemoAdmin123!}
+  user-password: ${BOOTSTRAP_USER_PASSWORD:DemoUser123!}
+hotel:
+  base-url: ${HOTEL_BASE_URL:http://hotel-service}
+  discovery: ${HOTEL_DISCOVERY:true}
+  timeout-ms: 1200
+  max-attempts: 3
+  retry-delay-ms: 150
+saga:
+  recovery-delay-ms: 5000
+  pending-timeout-seconds: 60

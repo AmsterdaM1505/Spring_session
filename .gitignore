@@ -1,0 +1,13 @@
+**/target/
+.tools/
+.work/
+.env
+*.log
+*.pid
+.idea/
+*.iml
+__pycache__/
+deliverables/
+evidence/runtime/
+evidence/local-checks.txt
+review-excluded/
